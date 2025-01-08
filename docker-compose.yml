@@ -5,6 +5,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    volumes:
+      - ./node_modules:/usr/src/app/node_modules
+      - ./src:/usr/src/app/src:delegated
     ports:
       - "5090:3000"
     depends_on:

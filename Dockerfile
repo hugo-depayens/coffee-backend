@@ -8,4 +8,5 @@ RUN npm install
 COPY . .
 
 EXPOSE 3000
-CMD ["npm", "run", "start"]
+CMD ["npx", "nodemon", "--legacy-watch", "src/server.js"]
+

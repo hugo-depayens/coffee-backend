@@ -38,5 +38,8 @@
     "url": "https://github.com/hugo-depayens/coffee-backend/issues"
   },
   "homepage": "https://github.com/hugo-depayens/coffee-backend#readme",
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
 }

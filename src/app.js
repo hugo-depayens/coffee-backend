@@ -6,6 +6,7 @@ import xss from 'xss-clean'
 import rateLimit from 'express-rate-limit'
 import dotenv from 'dotenv'
 import errorHandler from '../middlewares/errorHandler.js'
+import userRouter from "../routes/userRouter.js";
 
 dotenv.config()
 
@@ -24,8 +25,10 @@ app.use(rateLimit({
 app.use(errorHandler);
 
 app.get('/', (req, res) => {
-    res.json('success')
+    res.json('Hello, world!');
 })
+
+app.use('/api/users', userRouter);
 
 
 export default app;
