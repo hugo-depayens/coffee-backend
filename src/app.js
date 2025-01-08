@@ -7,6 +7,8 @@ import rateLimit from 'express-rate-limit'
 import dotenv from 'dotenv'
 import errorHandler from '../middlewares/errorHandler.js'
 import userRouter from "../routes/userRouter.js";
+import { swaggerSpec, swaggerUi } from '../config/swagger.js';
+
 
 dotenv.config()
 
@@ -16,6 +18,7 @@ app.use(express.json());
 app.use(cookieParser())
 app.use(cors())
 app.use(helmet())
+
 app.use(xss())
 app.use(rateLimit({
     windowMs: 15 * 60 * 1000,
@@ -23,6 +26,8 @@ app.use(rateLimit({
     message: 'Too many requests from this IP, please try again later.'
 }));
 app.use(errorHandler);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
 app.get('/', (req, res) => {
     res.json('Hello, world!');

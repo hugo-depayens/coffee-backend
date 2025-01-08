@@ -5,6 +5,27 @@ import {authenticateToken} from '../middlewares/jwt.js'
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /api/users/me:
+ *   post:
+ *     summary: Получение списка пользователей
+ *     description: Возвращает массив пользователей
+ *     responses:
+ *       200:
+ *         description: Успешный ответ
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   name:
+ *                     type: string
+ */
 router.post('/me', getUser);
 // router.get('/users', authenticateToken, userController.getAllUsers);
 // router.get('/user/:id', authenticateToken, userController.getUserById);
