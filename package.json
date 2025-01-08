@@ -1,0 +1,39 @@
+{
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "pg": "^8.13.1",
+    "sequelize": "^6.37.5",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "name": "coffee_api",
+  "version": "1.0.0",
+  "description": "Backend for Task",
+  "main": "src/server.js",
+  "devDependencies": {},
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hugo-depayens/coffee-backend.git"
+  },
+  "keywords": [
+    "API",
+    "Backend",
+    "Coffee",
+    "Task"
+  ],
+  "author": "Zohir",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hugo-depayens/coffee-backend/issues"
+  },
+  "homepage": "https://github.com/hugo-depayens/coffee-backend#readme",
+  "type": "module"
+}
