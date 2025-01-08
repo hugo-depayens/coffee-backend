@@ -1,14 +1,7 @@
-import express from 'express';
+import app from './app.js'
 
-const app = express();
+const port = process.env.PORT || 3000;
 
-// Middleware to parse JSON request bodies
-app.use(express.json());
-
-app.get('/', (req, res) => {
-    res.json('success')
-})
-
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
-})
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
