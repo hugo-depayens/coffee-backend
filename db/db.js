@@ -3,10 +3,10 @@ const { Pool } = pkg
 
 export const pool = new Pool(
     {
-        user: process.env.POSTGRES_USER,
-        host: "hardline_postgres",
-        database: process.env.POSTGRES_DB,
-        password: process.env.POSTGRES_PASSWORD,
+        user: process.env.DB_USER,
+        host: process.env.DB_HOST,
+        database: process.env.DB_NAME,
+        password: process.env.DB_PASSWORD,
         port: 5432,
         max: 1000,
         idleTimeoutMillis: 30000,

@@ -6,7 +6,11 @@ import xss from 'xss-clean'
 import rateLimit from 'express-rate-limit'
 import dotenv from 'dotenv'
 import errorHandler from '../middlewares/errorHandler.js'
+
+//routers
 import userRouter from "../routes/userRouter.js";
+import authRouter from "../routes/authRouter.js";
+
 import { swaggerSpec, swaggerUi } from '../config/swagger.js';
 
 
@@ -34,6 +38,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/users', userRouter);
+app.use('/api/auth', authRouter);
 
 
 export default app;
