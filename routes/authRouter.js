@@ -17,7 +17,7 @@ const validate = (validations) => async (req, res, next) => {
 };
 
 router.post(
-    "/register",
+    "/registration",
     validate([
         body("username").isString().isLength({ min: 3 }).trim().escape(),
         body("password").isString().isLength({ min: 8 }),
@@ -58,7 +58,7 @@ router.post(
 );
 
 router.post(
-    "/login",
+    "/authentication",
     validate([
         body("email").isEmail().normalizeEmail(),
         body("password").isString(),

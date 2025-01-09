@@ -43,18 +43,76 @@ export const getUserById = async (id) => {
     }
 };
 
-export const updateUser = async (id, username, newPassword) => {
+export const updateUser = async (id, {username, email, password, address, role }) => {
+    if(!email || !password || !username) {
+        return { success: false, error: "username, email and password are required"};
+    }
     try {
         const result = await pool.query(
-            `UPDATE users SET username=$1, password=$2 WHERE id=$3 RETURNING *`,
-            [username, newPassword, id]
+            `UPDATE users SET username=$1, email=$2, password=$3, address=$4, role=$5 WHERE id=$6 RETURNING *`,
+            [username, email, password, address, role, id]
         );
-        return { success: true, data: result.rows[0] || null };
+        return { success: true, data: result.rows[0] };
     } catch (err) {
         console.error("Error updating user:", err);
         return { success: false, error: err.message };
     }
 };
+
+export const partialUpdateUser = async (id, { username, email, password, address, role }) => {
+    try {
+        const user = await getUserById(id);
+
+        if (!user.data) {
+            return { success: false, error: "User not found." };
+        }
+
+        const updatedFields = [];
+        const values = [];
+
+        if (username) {
+            updatedFields.push(`username = $${updatedFields.length + 1}`);
+            values.push(username);
+        }
+
+        if (email) {
+            updatedFields.push(`email = $${updatedFields.length + 1}`);
+            values.push(email);
+        }
+
+        if (password) {
+            updatedFields.push(`password = $${updatedFields.length + 1}`);
+            values.push(await bcrypt.hash(password, 10)); // Хэшируем пароль
+        }
+
+        if (address) {
+            updatedFields.push(`address = $${updatedFields.length + 1}`);
+            values.push(address);
+        }
+
+        if (role) {
+            updatedFields.push(`role = $${updatedFields.length + 1}`);
+            values.push(role);
+        }
+
+        if (updatedFields.length === 0) {
+            return { success: false, error: "No fields to update." };
+        }
+
+        const query = `UPDATE users SET ${updatedFields.join(", ")} WHERE id = $${updatedFields.length + 1} RETURNING *`;
+        values.push(id);
+
+        const result = await pool.query(query, values);
+
+        return { success: true, data: result.rows[0] };
+
+    } catch (err) {
+        console.error("Error updating user:", err);
+        return { success: false, error: err.message };
+    }
+};
+
+
 
 export const getAllUsers = async () => {
     try {
@@ -75,3 +133,4 @@ export const deleteUser = async (id) => {
         return { success: false, error: err.message };
     }
 };
+

@@ -1,5 +1,5 @@
 import express from 'express'
-import {getUser} from '../controllers/users.js'
+import {getUser, getUsers, getUsersById, updateUserById, partialUpdateUserById, deleteUserById} from '../controllers/users.js'
 import {authenticateToken} from '../middlewares/jwt.js'
 
 
@@ -27,10 +27,12 @@ const router = express.Router();
  *                     type: string
  */
 router.post('/me', getUser);
-// router.get('/users', authenticateToken, userController.getAllUsers);
-// router.get('/user/:id', authenticateToken, userController.getUserById);
-// router.put('/user/:id', authenticateToken, userController.updateUser);
-// router.patch('/user/:id', authenticateToken, userController.partialUpdateUser);
+router.get('/users', getUsers);
+router.get('/user/:id', getUsersById);
+router.put('/user/:id', updateUserById);
+router.patch('/user/:id', partialUpdateUserById);
+router.delete('/user/:id', deleteUserById);
 // router.delete('/user/:id', authenticateToken, userController.deleteUser);
+
 
 export default router;

@@ -1,5 +1,5 @@
 {
-  "watch": ["**/*.js", "**/*.json"],
+  "watch": ["src", "controllers", "routes", "config", "db", "."],
   "ignore": ["node_modules"],
   "exec": "node src/server.js"
 }
