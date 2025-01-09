@@ -20,8 +20,8 @@ export function authenticateToken(req, res, next)  {
     })
   }
 
-export function generateToken  ({username, email})  {
-    return jwt.sign({ username: username, email: email }, process.env.JWT_SECRET, { expiresIn: '24h' })
+export function generateToken  ({id ,username, email})  {
+    return jwt.sign({id: id, username: username, email: email }, process.env.JWT_SECRET, { expiresIn: '24h' })
 }
 
 

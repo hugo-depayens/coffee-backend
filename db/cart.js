@@ -31,34 +31,62 @@ export const getCart = async (user_id) => {
     }
 };
 
-export const updateCartItem = async (user_id, product_id, quantity) => {
+export const getCartById = async (user_id) => {
     try {
         const result = await pool.query(
-            `UPDATE cart 
-             SET quantity = $3, updated_at = CURRENT_TIMESTAMP 
-             WHERE user_id = $1 AND product_id = $2 
-             RETURNING *`,
-            [user_id, product_id, quantity]
+            "SELECT * FROM cart WHERE user_id = $1",
+            [user_id]
         );
         return result;
     } catch (error) {
-        throw new Error(`Ошибка при обновлении количества в корзине: ${error.message}`);
+        throw new Error(`Ошибка при получении корзины по ID: ${error.message}`);
     }
-};
+}
+
+// export const updateCartItem = async (user_id, product_id, quantity) => {
+//     try {
+//         const result = await pool.query(
+//             `UPDATE cart
+//              SET quantity = $3, created_at = CURRENT_TIMESTAMP
+//              WHERE user_id = $1 AND product_id = $2
+//              RETURNING *`,
+//             [user_id, product_id, quantity]
+//         );
+//         return result;
+//     } catch (error) {
+//         throw new Error(`Ошибка при обновлении количества в корзине: ${error.message}`);
+//     }
+// };
 
 export const removeFromCart = async (user_id, product_id) => {
     try {
         const result = await pool.query(
-            "DELETE FROM cart WHERE user_id = $1 AND product_id = $2",
+            `WITH updated AS (
+                UPDATE cart
+                SET quantity = quantity - 1
+                WHERE user_id = $1 AND product_id = $2 AND quantity > 1
+                RETURNING *
+            )
+            DELETE FROM cart
+            WHERE user_id = $1 AND product_id = $2 AND quantity = 1
+            AND NOT EXISTS (SELECT 1 FROM updated)
+            RETURNING *;`,
             [user_id, product_id]
         );
-        return result;
+
+
+        if (result.rowCount === 0) {
+            throw new Error("Товар не найден или его количество уже равно 0");
+        }
+
+        return result.rows;
     } catch (error) {
-        throw new Error(`Ошибка при удалении товара из корзины: ${error.message}`);
+        throw new Error(`Ошибка при изменении корзины: ${error.message}`);
     }
 };
 
-export const clearCart = async (user_id) => {
+
+export const clear = async (user_id) => {
     try {
         const result = await pool.query(
             "DELETE FROM cart WHERE user_id = $1",
@@ -67,20 +95,5 @@ export const clearCart = async (user_id) => {
         return result;
     } catch (error) {
         throw new Error(`Ошибка при очистке корзины: ${error.message}`);
-    }
-};
-
-export const getCartTotal = async (user_id) => {
-    try {
-        const result = await pool.query(
-            `SELECT SUM(p.price * c.quantity) as total_amount
-             FROM cart c
-             JOIN products p ON c.product_id = p.id
-             WHERE c.user_id = $1`,
-            [user_id]
-        );
-        return result;
-    } catch (error) {
-        throw new Error(`Ошибка при подсчете общей стоимости корзины: ${error.message}`);
     }
 };

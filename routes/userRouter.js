@@ -1,37 +1,16 @@
 import express from 'express'
-import {getUser, getUsers, getUsersById, updateUserById, partialUpdateUserById, deleteUserById} from '../controllers/users.js'
+import * as userController from '../controllers/users.js'
 import {authenticateToken} from '../middlewares/jwt.js'
 
 
 const router = express.Router();
 
-/**
- * @swagger
- * /api/users/me:
- *   post:
- *     summary: Получение списка пользователей
- *     description: Возвращает массив пользователей
- *     responses:
- *       200:
- *         description: Успешный ответ
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                   name:
- *                     type: string
- */
-router.post('/me', getUser);
-router.get('/users', getUsers);
-router.get('/user/:id', getUsersById);
-router.put('/user/:id', updateUserById);
-router.patch('/user/:id', partialUpdateUserById);
-router.delete('/user/:id', deleteUserById);
+router.post('/me', authenticateToken, userController.getUser);
+router.get('/users', authenticateToken, userController.getUsers);
+router.get('/user/:id', authenticateToken, userController.getUsersById);
+router.put('/user/:id', authenticateToken, userController.updateUserById);
+router.patch('/user/:id', authenticateToken, userController.partialUpdateUserById);
+router.delete('/user/:id', authenticateToken, userController.deleteUserById);
 // router.delete('/user/:id', authenticateToken, userController.deleteUser);
 
 

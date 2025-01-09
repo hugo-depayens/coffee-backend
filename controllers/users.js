@@ -1,10 +1,16 @@
 import {getAllUsers, getUserById, partialUpdateUser, updateUser, deleteUser} from "../db/users.js";
 import bcrypt from "bcryptjs"
+import jwt from "jsonwebtoken"
 
-export function getUser(req, res) {
-    const id = req.body.id;
+export async function getUser(req, res) {
+    const token = req.cookies.token
+    const payload = jwt.decode(token)
+    const id = payload.id;
+
+    console.log(id)
     if (id) {
-        res.json(getUserById(id))
+        const user = await getUserById(id)
+        res.status(200).json(user)
     }else{
         res.status(404).json({ message: 'User not found.' })
     }
@@ -19,11 +25,12 @@ export async function getUsers(req, res) {
 export async function getUsersById(req, res) {
     const id = parseInt(req.params.id)
     const user = await getUserById(id)
+    console.log(user)
     if (user.data === null) {
         return res.status(404).json({ message: 'User not found.' })
     }
 
-    if(!user.status){
+    if(!user.success){
         return res.status(403).json({ message: 'Internal error.' })
     }
     res.json(user)
@@ -138,3 +145,5 @@ export async function deleteUserById(req, res){
         res.status(500).json({ message: "Internal server error." });
     }
 }
+
+

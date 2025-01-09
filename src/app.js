@@ -10,8 +10,11 @@ import errorHandler from '../middlewares/errorHandler.js'
 //routers
 import userRouter from "../routes/userRouter.js";
 import authRouter from "../routes/authRouter.js";
+import cartRouter from '../routes/cartRouter.js';
+import productRouter from '../routes/productRouter.js';
 
-import { swaggerSpec, swaggerUi } from '../config/swagger.js';
+import swaggerSpec from '../config/swagger-output.json' assert { type: 'json' };
+import { swaggerUi } from '../config/swagger.js';
 
 
 dotenv.config()
@@ -37,9 +40,10 @@ app.get('/', (req, res) => {
     res.json('Hello, world!');
 })
 
-app.use('/api/users', userRouter);
-app.use('/api/auth', authRouter);
-
+app.use('/api', userRouter);
+app.use('/api', authRouter);
+app.use('/api', cartRouter);
+app.use('/api', productRouter);
 
 export default app;
 

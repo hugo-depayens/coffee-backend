@@ -86,7 +86,7 @@ router.post(
                 return res.status(401).json({ error: "Invalid credentials" });
             }
 
-            const token = generateToken({ username: user.username, email: user.email });
+            const token = generateToken({ id: user.id, username: user.username, email: user.email });
             console.log("Token generated for:", email);
 
             res.cookie("token", token, {

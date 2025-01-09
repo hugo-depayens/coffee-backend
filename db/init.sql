@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS products (
                                         name VARCHAR(255) NOT NULL,
                                         price NUMERIC(10, 2) NOT NULL,
                                         category_id INT REFERENCES categories(id) ON DELETE CASCADE,
+                                        image_url TEXT NOT NULL,
                                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -43,3 +44,6 @@ CREATE TABLE IF NOT EXISTS cart (
                                     quantity INT DEFAULT 1,
                                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+
+ALTER TABLE cart ADD CONSTRAINT unique_user_product UNIQUE (user_id, product_id);
