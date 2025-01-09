@@ -17,3 +17,15 @@ const options = {
 const swaggerSpec = swaggerJSDoc(options);
 
 export { swaggerSpec, swaggerUi };
+
+
+
+// import swaggerAutogen from 'swagger-autogen';
+//
+// const outputFile = './swagger-output.json'; // Путь к выходному файлу JSON
+// const endpointsFiles = ['../routes/*.js']; // Путь к файлам с маршрутами
+//
+// // Генерация документации
+// swaggerAutogen(outputFile, endpointsFiles).then(() => {
+//     import('./app.js'); // Запуск приложения после генерации документации
+// });
