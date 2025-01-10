@@ -1,10 +1,10 @@
+
 -- Создание таблицы пользователей
 CREATE TABLE IF NOT EXISTS users (
                                      id SERIAL PRIMARY KEY,
                                      username VARCHAR(255) NOT NULL UNIQUE,
                                      password VARCHAR(255) NOT NULL,
                                      email VARCHAR(255) NOT NULL UNIQUE,
-                                     phone VARCHAR(20) DEFAULT NULL UNIQUE,
                                      address VARCHAR(255) DEFAULT NULL,
                                      role VARCHAR(50) DEFAULT 'user',
                                      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -34,7 +34,9 @@ CREATE TABLE IF NOT EXISTS orders (
                                       user_id INT REFERENCES users(id) ON DELETE CASCADE,
                                       total_price NUMERIC(10, 2) NOT NULL,
                                       status VARCHAR(30) NOT NULL default 'pending',
-                                      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                                      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                      order_data JSONB NOT NULL
 );
 
 -- Создание таблицы корзины
@@ -43,8 +45,8 @@ CREATE TABLE IF NOT EXISTS cart (
                                     user_id INT REFERENCES users(id) ON DELETE CASCADE,
                                     product_id INT REFERENCES products(id) ON DELETE CASCADE,
                                     quantity INT DEFAULT 1,
-                                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                    CONSTRAINT unique_user_product UNIQUE (user_id, product_id)
 );
 
 
-ALTER TABLE cart ADD CONSTRAINT unique_user_product UNIQUE (user_id, product_id);
