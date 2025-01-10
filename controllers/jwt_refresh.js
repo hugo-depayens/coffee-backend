@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { generateToken } from '../middlewares/jwt.js';
+import {getUserById} from "../db/users.js";
 
 export async function refreshAccessToken(req, res) {
     const { token } = req.cookies;
@@ -10,8 +11,15 @@ export async function refreshAccessToken(req, res) {
 
     try {
         const payload = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await getUserById(payload.id)
 
-        const newAccessToken = generateToken(payload);
+
+        const newAccessToken = generateToken({
+            id: user.data.id,
+            username: user.data.username,
+            email: user.data.email,
+            role: user.data.role
+        });
 
         res.cookie("token", newAccessToken, {
             httpOnly: true,
