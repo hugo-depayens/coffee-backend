@@ -11,10 +11,156 @@
     "http"
   ],
   "paths": {
-    "/registration": {
+  "/registration": {
+    "post": {
+      "tags": ["Authentication"],
+      "description": "Регистрация нового пользователя",
+      "parameters": [
+        {
+          "name": "body",
+          "in": "body",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "username": {
+                "example": "any"
+              },
+              "password": {
+                "example": "any"
+              },
+              "email": {
+                "example": "any"
+              }
+            }
+          }
+        }
+      ],
+      "responses": {
+        "201": {
+          "description": "Created"
+        },
+        "400": {
+          "description": "Bad Request"
+        },
+        "500": {
+          "description": "Internal Server Error"
+        }
+      }
+    }
+  },
+  "/authentication": {
+    "post": {
+      "tags": ["Authentication"],
+      "description": "Аутентификация пользователя",
+      "parameters": [
+        {
+          "name": "body",
+          "in": "body",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "example": "any"
+              },
+              "password": {
+                "example": "any"
+              }
+            }
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK"
+        },
+        "400": {
+          "description": "Bad Request"
+        },
+        "401": {
+          "description": "Unauthorized"
+        },
+        "500": {
+          "description": "Internal Server Error"
+        }
+      }
+    }
+},
+    "/me": {
       "post": {
-        "description": "",
+        "description": "Создание или обновление данных текущего пользователя. Этот запрос позволяет пользователю обновить или создать свою учетную запись.",
+        "tags": ["Users"],
+        "responses": {
+          "200": {
+            "description": "Запрос выполнен успешно. Данные пользователя обновлены или созданы."
+          },
+          "401": {
+            "description": "Неавторизованный доступ. Для выполнения этого запроса необходимо пройти аутентификацию."
+          },
+          "403": {
+            "description": "Запрещено. У пользователя нет прав для выполнения этого действия."
+          },
+          "404": {
+            "description": "Не найдено. Указанный ресурс не найден."
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "description": "Получение списка всех пользователей системы. Этот запрос доступен только для администратора или авторизованного пользователя с соответствующими правами.",
+        "tags": ["Users"],
+        "responses": {
+          "200": {
+            "description": "Запрос выполнен успешно. Возвращен список пользователей."
+          },
+          "401": {
+            "description": "Неавторизованный доступ. Для выполнения этого запроса необходимо пройти аутентификацию."
+          },
+          "403": {
+            "description": "Запрещено. У пользователя нет прав для выполнения этого действия."
+          }
+        }
+      }
+    },
+    "/user/{id}": {
+      "get": {
+        "description": "Получение информации о пользователе по его идентификатору. Этот запрос может быть использован для получения данных о конкретном пользователе.",
+        "tags": ["Users"],
         "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Уникальный идентификатор пользователя, для которого требуется получить информацию."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Запрос выполнен успешно. Возвращены данные указанного пользователя."
+          },
+          "401": {
+            "description": "Неавторизованный доступ. Для выполнения этого запроса необходимо пройти аутентификацию."
+          },
+          "403": {
+            "description": "Запрещено. У пользователя нет прав для выполнения этого действия."
+          },
+          "404": {
+            "description": "Не найдено. Пользователь с указанным ID не найден."
+          }
+        }
+      },
+      "put": {
+        "description": "Полное обновление данных пользователя по его ID. Все указанные поля должны быть предоставлены для успешного выполнения запроса.",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Уникальный идентификатор пользователя, чьи данные необходимо обновить."
+          },
           {
             "name": "body",
             "in": "body",
@@ -22,46 +168,24 @@
               "type": "object",
               "properties": {
                 "username": {
-                  "example": "any"
-                },
-                "password": {
-                  "example": "any"
+                  "example": "any",
+                  "description": "Имя пользователя для обновления."
                 },
                 "email": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/authentication": {
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "example": "any"
+                  "example": "any",
+                  "description": "Электронная почта пользователя для обновления."
                 },
                 "password": {
-                  "example": "any"
+                  "example": "any",
+                  "description": "Пароль пользователя для обновления."
+                },
+                "address": {
+                  "example": "any",
+                  "description": "Адрес пользователя для обновления."
+                },
+                "role": {
+                  "example": "any",
+                  "description": "Роль пользователя для обновления."
                 }
               }
             }
@@ -69,7 +193,149 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Запрос выполнен успешно. Данные пользователя обновлены."
+          },
+          "400": {
+            "description": "Неверный запрос. Пожалуйста, проверьте предоставленные данные."
+          },
+          "401": {
+            "description": "Неавторизованный доступ. Для выполнения этого запроса необходимо пройти аутентификацию."
+          },
+          "403": {
+            "description": "Запрещено. У пользователя нет прав для выполнения этого действия."
+          },
+          "404": {
+            "description": "Не найдено. Пользователь с указанным ID не найден."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера. Повторите запрос позже."
+          }
+        }
+      },
+      "patch": {
+        "description": "Частичное обновление данных пользователя. Этот запрос позволяет обновить только определенные поля пользователя, например, электронную почту или адрес.",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Уникальный идентификатор пользователя, чьи данные необходимо частично обновить."
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "example": "any",
+                  "description": "Имя пользователя для обновления."
+                },
+                "email": {
+                  "example": "any",
+                  "description": "Электронная почта пользователя для обновления."
+                },
+                "password": {
+                  "example": "any",
+                  "description": "Пароль пользователя для обновления."
+                },
+                "address": {
+                  "example": "any",
+                  "description": "Адрес пользователя для обновления."
+                },
+                "role": {
+                  "example": "any",
+                  "description": "Роль пользователя для обновления."
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Запрос выполнен успешно. Данные пользователя обновлены частично."
+          },
+          "400": {
+            "description": "Неверный запрос. Пожалуйста, проверьте предоставленные данные."
+          },
+          "401": {
+            "description": "Неавторизованный доступ. Для выполнения этого запроса необходимо пройти аутентификацию."
+          },
+          "403": {
+            "description": "Запрещено. У пользователя нет прав для выполнения этого действия."
+          },
+          "404": {
+            "description": "Не найдено. Пользователь с указанным ID не найден."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера. Повторите запрос позже."
+          }
+        }
+      },
+      "delete": {
+        "description": "Удаление пользователя по его идентификатору. Данный запрос позволяет удалить данные пользователя из системы.",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Уникальный идентификатор пользователя, которого необходимо удалить."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Запрос выполнен успешно. Пользователь удален."
+          },
+          "400": {
+            "description": "Неверный запрос. Пожалуйста, проверьте предоставленные данные."
+          },
+          "401": {
+            "description": "Неавторизованный доступ. Для выполнения этого запроса необходимо пройти аутентификацию."
+          },
+          "403": {
+            "description": "Запрещено. У пользователя нет прав для выполнения этого действия."
+          },
+          "404": {
+            "description": "Не найдено. Пользователь с указанным ID не найден."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера. Повторите запрос позже."
+          }
+        }
+      }
+    },
+    "/category": {
+      "post": {
+        "tags": ["Category"],
+        "description": "Create a new category",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Electronics"
+                },
+                "description": {
+                  "type": "string",
+                  "example": "Category for electronic devices"
+                }
+              },
+              "required": ["name"]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Category created successfully"
           },
           "400": {
             "description": "Bad Request"
@@ -77,15 +343,241 @@
           "401": {
             "description": "Unauthorized"
           },
+          "403": {
+            "description": "Forbidden"
+          },
           "500": {
             "description": "Internal Server Error"
           }
         }
       }
     },
-    "/addCart": {
+    "/categories": {
+      "get": {
+        "tags": ["Category"],
+        "description": "Get all categories",
+        "responses": {
+          "200": {
+            "description": "List of categories",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "Electronics"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "Category for electronic devices"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/category/{id}": {
+      "get": {
+        "tags": ["Category"],
+        "description": "Get a single category by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "Category ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "example": 1
+                },
+                "name": {
+                  "type": "string",
+                  "example": "Electronics"
+                },
+                "description": {
+                  "type": "string",
+                  "example": "Category for electronic devices"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Category not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Category"],
+        "description": "Update an existing category by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "Category ID"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Updated Category Name"
+                },
+                "description": {
+                  "type": "string",
+                  "example": "Updated category description"
+                }
+              },
+              "required": ["name"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category updated successfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Category not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Category"],
+        "description": "Partially update a category by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "Category ID"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Partially updated category name"
+                },
+                "description": {
+                  "type": "string",
+                  "example": "Partially updated description"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category partially updated"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Category not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Category"],
+        "description": "Delete a category by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "Category ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Category not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/cart": {
       "post": {
-        "description": "",
+        "tags": ["Cart"],
+        "description": "Добавить товар в корзину",
         "parameters": [
           {
             "name": "body",
@@ -117,11 +609,10 @@
             "description": "Internal Server Error"
           }
         }
-      }
-    },
-    "/getCart": {
+      },
       "get": {
-        "description": "",
+        "tags": ["Cart"],
+        "description": "Получить корзину пользователя",
         "responses": {
           "200": {
             "description": "OK"
@@ -138,9 +629,10 @@
         }
       }
     },
-    "/getCartById": {
+    "/cart_all": {
       "get": {
-        "description": "",
+        "tags": ["Cart"],
+        "description": "Получить все товары в корзине",
         "responses": {
           "200": {
             "description": "OK"
@@ -157,9 +649,10 @@
         }
       }
     },
-    "/deleteItem": {
+    "/cart_item": {
       "delete": {
-        "description": "",
+        "tags": ["Cart"],
+        "description": "Удалить товар из корзины",
         "parameters": [
           {
             "name": "itemId",
@@ -183,9 +676,10 @@
         }
       }
     },
-    "/clearCart": {
+    "/cart_clear": {
       "delete": {
-        "description": "",
+        "tags": ["Cart"],
+        "description": "Очистить корзину",
         "responses": {
           "200": {
             "description": "OK"
@@ -195,208 +689,6 @@
           },
           "403": {
             "description": "Forbidden"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/category": {
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "description": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/categories": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/category/{id}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "put": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "description": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "patch": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "description": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -406,18 +698,22 @@
     },
     "/order": {
       "post": {
-        "description": "",
+        "tags": ["Order"],
+        "description": "Create a new order",
         "parameters": [
           {
             "name": "body",
             "in": "body",
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "user_id": {
+                  "type": "string",
                   "example": "any"
                 },
                 "status": {
+                  "type": "string",
                   "example": "any"
                 }
               }
@@ -436,10 +732,31 @@
     },
     "/orders": {
       "get": {
-        "description": "",
+        "tags": ["Order"],
+        "description": "Get all orders",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "List of orders",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "example": "any"
+                  },
+                  "user_id": {
+                    "type": "string",
+                    "example": "any"
+                  },
+                  "status": {
+                    "type": "string",
+                    "example": "any"
+                  }
+                }
+              }
+            }
           },
           "500": {
             "description": "Internal Server Error"
@@ -449,21 +766,40 @@
     },
     "/order/{id}": {
       "get": {
-        "description": "",
+        "tags": ["Order"],
+        "description": "Get a single order by ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "description": "Order ID"
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Order found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "any"
+                },
+                "user_id": {
+                  "type": "string",
+                  "example": "any"
+                },
+                "status": {
+                  "type": "string",
+                  "example": "any"
+                }
+              }
+            }
           },
           "404": {
-            "description": "Not Found"
+            "description": "Order not found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -471,27 +807,33 @@
         }
       },
       "put": {
-        "description": "",
+        "tags": ["Order"],
+        "description": "Update an existing order by ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "description": "Order ID"
           },
           {
             "name": "body",
             "in": "body",
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "user_id": {
+                  "type": "string",
                   "example": "any"
                 },
                 "total_price": {
-                  "example": "any"
+                  "type": "number",
+                  "example": 100.00
                 },
                 "status": {
+                  "type": "string",
                   "example": "any"
                 }
               }
@@ -500,10 +842,10 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Order updated successfully"
           },
           "404": {
-            "description": "Not Found"
+            "description": "Order not found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -511,24 +853,49 @@
         }
       },
       "patch": {
-        "description": "",
+        "tags": ["Order"],
+        "description": "Partially update an order by ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "description": "Order ID"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "Status of the order (optional)"
+                },
+                "total_price": {
+                  "type": "number",
+                  "example": null,
+                  "format": "float",
+                  "description": "Total price of the order (optional)"
+                }
+              }
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Order partially updated",
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
           },
           "400": {
             "description": "Bad Request"
           },
           "404": {
-            "description": "Not Found"
+            "description": "Order not found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -536,21 +903,23 @@
         }
       },
       "delete": {
-        "description": "",
+        "tags": ["Order"],
+        "description": "Delete an order by ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "description": "Order ID"
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Order deleted successfully"
           },
           "404": {
-            "description": "Not Found"
+            "description": "Order not found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -562,6 +931,7 @@
       "post": {
         "description": "Создать новый продукт с загрузкой изображения",
         "consumes": ["multipart/form-data"],
+        "tags": ["Product"],
         "parameters": [
           {
             "name": "file",
@@ -616,7 +986,8 @@
     },
     "/products": {
       "get": {
-        "description": "",
+        "description": "Получить список продуктов",
+        "tags": ["Product"],
         "responses": {
           "200": {
             "description": "OK"
@@ -635,7 +1006,8 @@
     },
     "/products/{id}": {
       "get": {
-        "description": "",
+        "description": "Получить продукт по ID",
+        "tags": ["Product"],
         "parameters": [
           {
             "name": "id",
@@ -668,7 +1040,9 @@
     },
     "/product/{id}": {
       "put": {
-        "description": "",
+        "description": "Обновить продукт по ID",
+        "tags": ["Product"],
+        "consumes": ["multipart/form-data"],
         "parameters": [
           {
             "name": "id",
@@ -677,22 +1051,35 @@
             "type": "string"
           },
           {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "price": {
-                  "example": "any"
-                },
-                "category_id": {
-                  "example": "any"
-                }
-              }
-            }
+            "name": "file",
+            "in": "formData",
+            "description": "Изображение продукта",
+            "required": false,
+            "type": "file"
+          },
+          {
+            "name": "name",
+            "in": "formData",
+            "description": "Название продукта",
+            "required": false,
+            "type": "string",
+            "example": "any"
+          },
+          {
+            "name": "price",
+            "in": "formData",
+            "description": "Цена продукта",
+            "required": false,
+            "type": "number",
+            "example": 100.0
+          },
+          {
+            "name": "category_id",
+            "in": "formData",
+            "description": "ID категории продукта",
+            "required": false,
+            "type": "integer",
+            "example": 1
           }
         ],
         "responses": {
@@ -717,7 +1104,9 @@
         }
       },
       "patch": {
-        "description": "",
+        "description": "Частично обновить продукт по ID",
+        "tags": ["Product"],
+        "consumes": ["multipart/form-data"],
         "parameters": [
           {
             "name": "id",
@@ -726,25 +1115,35 @@
             "type": "string"
           },
           {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "price": {
-                  "example": "any"
-                },
-                "category_id": {
-                  "example": "any"
-                },
-                "image_url": {
-                  "example": "any"
-                }
-              }
-            }
+            "name": "file",
+            "in": "formData",
+            "description": "Изображение продукта",
+            "required": false,
+            "type": "file"
+          },
+          {
+            "name": "name",
+            "in": "formData",
+            "description": "Название продукта",
+            "required": false,
+            "type": "string",
+            "example": "any"
+          },
+          {
+            "name": "price",
+            "in": "formData",
+            "description": "Цена продукта",
+            "required": false,
+            "type": "number",
+            "example": 100.0
+          },
+          {
+            "name": "category_id",
+            "in": "formData",
+            "description": "ID категории продукта",
+            "required": false,
+            "type": "integer",
+            "example": 1
           }
         ],
         "responses": {
@@ -769,210 +1168,8 @@
         }
       },
       "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/me": {
-      "post": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/users": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        }
-      }
-    },
-    "/user/{id}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      },
-      "put": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "username": {
-                  "example": "any"
-                },
-                "email": {
-                  "example": "any"
-                },
-                "password": {
-                  "example": "any"
-                },
-                "address": {
-                  "example": "any"
-                },
-                "role": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "patch": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "username": {
-                  "example": "any"
-                },
-                "email": {
-                  "example": "any"
-                },
-                "password": {
-                  "example": "any"
-                },
-                "address": {
-                  "example": "any"
-                },
-                "role": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "delete": {
-        "description": "",
+        "description": "Удалить продукт по ID",
+        "tags": ["Product"],
         "parameters": [
           {
             "name": "id",
