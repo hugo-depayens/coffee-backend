@@ -11,7 +11,7 @@ router.post('/product', authenticateToken, upload.single('file'), productsContro
 router.get('/products', authenticateToken, productsController.getAllProducts)
 router.get('/products/:id',authenticateToken, productsController.getProductById)
 router.put('/product/:id', authenticateToken, upload.single('file'), productsController.updateProduct)
-router.patch('/product/:id', authenticateToken, productsController.partitionUpdate)
+router.patch('/product/:id', authenticateToken,  upload.single('file'), productsController.partitionUpdate)
 router.delete('/product/:id', authenticateToken, productsController.deleteProduct)
 
 

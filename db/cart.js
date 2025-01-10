@@ -74,11 +74,6 @@ export const removeFromCart = async (user_id, product_id) => {
             [user_id, product_id]
         );
 
-
-        if (result.rowCount === 0) {
-            throw new Error("Товар не найден или его количество уже равно 0");
-        }
-
         return result.rows;
     } catch (error) {
         throw new Error(`Ошибка при изменении корзины: ${error.message}`);

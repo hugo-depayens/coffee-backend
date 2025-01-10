@@ -26,10 +26,12 @@ export async function getAllCart (req, res) {
 }
 
 export async function getCartById (req, res) {
-    const userId = req.body.id;
+    const token = req.cookies.token
+    const payload = jwt.decode(token)
+    const userId = payload.id;
 
     cartDbController.getCartById(userId)
-       .then((cart) => res.json(cart))
+       .then((cart) => res.json(cart.rows))
        .catch((err) => res.status(500).json({ error: err.message }));
 }
 

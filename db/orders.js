@@ -63,19 +63,34 @@ export const updateOrder = async (id, { user_id, total_price, status }) => {
   return await pool.query(query, values);
 };
 
-export const partialUpdateOrder = async (id, updates) => {
-  const fields = Object.keys(updates);
-  const values = Object.values(updates);
+export const partialUpdateOrder = async (id, { status, total_price }) => {
+  const fields = [];
+  const values = [];
 
-  const setClause = fields.map((field, index) => `${field} = $${index + 2}`).join(", ");
+  if (status) {
+    fields.push(`status = $${fields.length + 1}`);
+    values.push(status);
+  }
+
+  if (total_price) {
+    fields.push(`total_price = $${fields.length + 1}`);
+    values.push(total_price);
+  }
+
+  console.log(fields);
+  if (fields.length === 0) {
+    throw new Error("Нет данных для обновления");
+  }
+
+  const setClause = fields.join(", ");
   const query = `
-    UPDATE orders
-    SET ${setClause}
-    WHERE id = $1
-    RETURNING *;
-  `;
+        UPDATE orders
+        SET ${setClause}
+        WHERE id = $${fields.length + 1}
+        RETURNING *;
+    `;
 
-  return await pool.query(query, [id, ...values]);
+  return await pool.query(query, [...values, id]);
 };
 
 export const deleteOrder = async (id) => {

@@ -54,13 +54,22 @@ export async function updateOrder(req, res) {
 export async function partialUpdateOrder(req, res) {
     try {
         const { id } = req.params;
-        const updates = req.body;
+        const { status, total_price } = req.body;
 
-        if (!updates || Object.keys(updates).length === 0) {
+        console.log(total_price, status)
+        if (!status && !total_price) {
             return res.status(400).json({ message: "Нет данных для обновления" });
         }
 
-        const result = await ordersDbController.partialUpdateOrder(id, updates);
+        if (status && typeof status !== 'string') {
+            return res.status(400).json({ message: "Поле 'status' должно быть строкой" });
+        }
+
+        if (total_price && (typeof total_price !== 'number' || total_price <= 0)) {
+            return res.status(400).json({ message: "Поле 'total_price' должно быть положительным числом" });
+        }
+
+        const result = await ordersDbController.partialUpdateOrder(id, { status, total_price });
 
         if (result.rowCount === 0) {
             return res.status(404).json({ message: "Заказ не найден" });
@@ -68,9 +77,11 @@ export async function partialUpdateOrder(req, res) {
 
         res.status(200).json(result.rows[0]);
     } catch (error) {
+        console.error("Error while partial updating order:", error);
         res.status(500).json({ message: "Ошибка при частичном обновлении заказа", error: error.message });
     }
 }
+
 
 export async function deleteOrder(req, res) {
     try {
