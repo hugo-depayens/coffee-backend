@@ -28,7 +28,7 @@
 ### 2. Клонируйте репозиторий
 
 ```bash
-git clone (https://github.com/hugo-depayens/coffee-backend)
+git clone https://github.com/hugo-depayens/coffee-backend
 ```
 
 ### 3. Создайте файл `.env`
