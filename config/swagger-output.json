@@ -23,13 +23,13 @@
             "type": "object",
             "properties": {
               "username": {
-                "example": "any"
+                "example": "test"
               },
               "password": {
-                "example": "any"
+                "example": "test222333"
               },
               "email": {
-                "example": "any"
+                "example": "test@gmail.com"
               }
             }
           }
@@ -60,10 +60,10 @@
             "type": "object",
             "properties": {
               "email": {
-                "example": "any"
+                "example": "test@gmail.com"
               },
               "password": {
-                "example": "any"
+                "example": "test222333"
               }
             }
           }
