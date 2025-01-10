@@ -71,7 +71,7 @@ docker compose -f docker-compose.yml down --volumes
 
 ## Контакты
 
-Если у вас есть вопросы, пишите на email: vasv@gmail.com
+Если у вас есть вопросы, пишите на email: vasv29834@gmail.com
 
 Даталогическая модель базы данных:
 ![coffee_shop](https://github.com/user-attachments/assets/de091c15-bbe8-46c4-982b-c0bc0abcfe6e)
