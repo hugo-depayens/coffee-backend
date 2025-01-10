@@ -159,69 +159,26 @@
     },
     "/deleteItem": {
       "delete": {
-        "summary": "Delete an item",
-        "description": "Deletes an item from the system by its unique identifier.",
+        "description": "",
         "parameters": [
           {
             "name": "itemId",
             "in": "query",
-            "required": true,
-            "description": "The unique identifier of the item to delete.",
-            "schema": {
-              "type": "integer"
-            }
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
-            "description": "Item successfully deleted",
-            "content": {
-              "application/json": {
-                "example": {
-                  "message": "Item deleted successfully"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request - Invalid item ID",
-            "content": {
-              "application/json": {
-                "example": {
-                  "message": "Invalid item ID"
-                }
-              }
-            }
+            "description": "OK"
           },
           "401": {
-            "description": "Unauthorized - Authentication required",
-            "content": {
-              "application/json": {
-                "example": {
-                  "message": "Authentication failed"
-                }
-              }
-            }
+            "description": "Unauthorized"
           },
           "403": {
-            "description": "Forbidden - You do not have permission to delete this item",
-            "content": {
-              "application/json": {
-                "example": {
-                  "message": "You are not allowed to perform this action"
-                }
-              }
-            }
+            "description": "Forbidden"
           },
           "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "example": {
-                  "message": "An unexpected error occurred"
-                }
-              }
-            }
+            "description": "Internal Server Error"
           }
         }
       }
@@ -238,6 +195,362 @@
           },
           "403": {
             "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/category": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "description": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/category/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "description": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "patch": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "description": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/order": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user_id": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/orders": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/order/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user_id": {
+                  "example": "any"
+                },
+                "total_price": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "patch": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -308,6 +621,12 @@
           "200": {
             "description": "OK"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -332,6 +651,12 @@
           "400": {
             "description": "Bad Request"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Not Found"
           },
@@ -343,115 +668,51 @@
     },
     "/product/{id}": {
       "put": {
-        "tags": ["Products"],
-        "summary": "Полное обновление продукта",
-        "description": "Обновить существующий продукт с возможностью загрузки изображения.",
-        "consumes": ["multipart/form-data"],
-        "produces": ["application/json"],
+        "description": "",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID продукта для обновления",
             "required": true,
-            "type": "integer",
-            "example": 1
+            "type": "string"
           },
           {
-            "name": "file",
-            "in": "formData",
-            "description": "Изображение продукта",
-            "required": false,
-            "type": "file"
-          },
-          {
-            "name": "name",
-            "in": "formData",
-            "description": "Название продукта",
-            "required": true,
-            "type": "string",
-            "example": "Пример продукта"
-          },
-          {
-            "name": "price",
-            "in": "formData",
-            "description": "Цена продукта",
-            "required": true,
-            "type": "number",
-            "format": "float",
-            "example": 250.75
-          },
-          {
-            "name": "category_id",
-            "in": "formData",
-            "description": "ID категории продукта",
-            "required": true,
-            "type": "integer",
-            "example": 2
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "price": {
+                  "example": "any"
+                },
+                "category_id": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "Успешное обновление продукта",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "integer",
-                  "example": 1
-                },
-                "name": {
-                  "type": "string",
-                  "example": "Обновлённое название продукта"
-                },
-                "price": {
-                  "type": "number",
-                  "format": "float",
-                  "example": 250.75
-                },
-                "category_id": {
-                  "type": "integer",
-                  "example": 2
-                },
-                "image_url": {
-                  "type": "string",
-                  "example": "/uploads/product-image.jpg"
-                }
-              }
-            }
+            "description": "OK"
           },
           "400": {
-            "description": "Некорректные данные",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": {
-                  "type": "string",
-                  "example": "Неверный ID продукта"
-                }
-              }
-            }
+            "description": "Bad Request"
           },
           "401": {
-            "description": "Неавторизованный доступ"
+            "description": "Unauthorized"
           },
           "403": {
-            "description": "Доступ запрещён"
+            "description": "Forbidden"
           },
           "404": {
-            "description": "Продукт не найден"
+            "description": "Not Found"
           },
           "500": {
-            "description": "Ошибка сервера",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": {
-                  "type": "string",
-                  "example": "Ошибка при обновлении продукта"
-                }
-              }
-            }
+            "description": "Internal Server Error"
           }
         }
       },
@@ -564,6 +825,12 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         }
       }
@@ -582,6 +849,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "403": {
             "description": "Forbidden"
@@ -632,6 +902,12 @@
           "400": {
             "description": "Bad Request"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Not Found"
           },
@@ -681,6 +957,12 @@
           "400": {
             "description": "Bad Request"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Not Found"
           },
@@ -705,6 +987,12 @@
           },
           "400": {
             "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           },
           "404": {
             "description": "Not Found"

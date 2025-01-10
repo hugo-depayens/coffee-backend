@@ -1,5 +1,4 @@
 import * as productDbController from "../db/products.js";
-import {deleteDBProduct, partialUpdateProduct} from "../db/products.js";
 
 
 export async function createProduct(req, res ) {
@@ -84,7 +83,7 @@ export async function partitionUpdate(req, res) {
     const { name, price, category_id, image_url } = req.body;
 
     try {
-        const result = await partialUpdateProduct(id, { name, price, category_id, image_url });
+        const result = await productDbController.partialUpdateProduct(id, { name, price, category_id, image_url });
         if (!result.success) {
             return res.status(404).json({ error: result.error });
         }

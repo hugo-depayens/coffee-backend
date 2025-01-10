@@ -1,71 +1,84 @@
-import { pool } from "./db.js";
+import { pool } from './db.js';
 
-export const createOrder = async (user_id, total_price) => {
-  try {
-    const result = await pool.query(
-      "INSERT INTO orders (user_id, total_price) VALUES ($1, $2) RETURNING *",
-      [user_id, total_price]
-    );
-    return result;
-  } catch (error) {
-    throw new Error(`Ошибка при создании заказа: ${error.message}`);
+export const createOrder = async (user_id, status = 'pending') => {
+  const cartQuery = `
+    SELECT c.product_id, c.quantity, p.price
+    FROM cart c
+           JOIN products p ON c.product_id = p.id
+    WHERE c.user_id = $1;
+  `;
+  const cartResult = await pool.query(cartQuery, [user_id]);
+
+  if (cartResult.rows.length === 0) {
+    throw new Error('Корзина пуста');
   }
+
+  const items = cartResult.rows.map(item => ({
+    product_id: item.product_id,
+    quantity: item.quantity,
+    price: item.price,
+    total: item.quantity * item.price
+  }));
+
+  const total_price = items.reduce((total, item) => total + item.total, 0);
+
+  const order_data = {
+    items: items,
+    total_price: total_price
+  };
+
+  const orderQuery = `
+        INSERT INTO orders (user_id, total_price, status, order_data)
+        VALUES ($1, $2, $3, $4)
+        RETURNING *;
+    `;
+  const orderValues = [user_id, total_price, status, JSON.stringify(order_data)];
+  const orderResult = await pool.query(orderQuery, orderValues);
+  const order_id = orderResult.rows[0].id;
+
+  const clearCartQuery = `DELETE FROM cart WHERE user_id = $1;`;
+  await pool.query(clearCartQuery, [user_id]);
+
+  return orderResult.rows[0];
 };
 
-export const getOrder = async (order_id) => {
-  try {
-    const result = await pool.query("SELECT * FROM orders WHERE id = $1", [
-      order_id,
-    ]);
-    return result;
-  } catch (error) {
-    throw new Error(`Ошибка при получении заказа: ${error.message}`);
-  }
+export const getAllOrders = async () => {
+  const query = `SELECT * FROM orders ORDER BY created_at DESC;`;
+  return await pool.query(query);
 };
 
-export const getUserOrders = async (user_id) => {
-  try {
-    const result = await pool.query("SELECT * FROM orders WHERE user_id = $1", [
-      user_id,
-    ]);
-    return result;
-  } catch (error) {
-    throw new Error(
-      `Ошибка при получении заказов пользователя: ${error.message}`
-    );
-  }
+export const getOrderById = async (id) => {
+  const query = `SELECT * FROM orders WHERE id = $1;`;
+  return await pool.query(query, [id]);
 };
 
-export const getOrderById = async (order_id) => {
-  try {
-    const result = await pool.query("SELECT * FROM orders WHERE id = $1", [
-      order_id,
-    ]);
-    return result;
-  } catch (error) {
-    throw new Error(`Ошибка при получении заказа по ID: ${error.message}`);
-  }
+export const updateOrder = async (id, { user_id, total_price, status }) => {
+  const query = `
+    UPDATE orders
+    SET user_id = $2, total_price = $3, status = $4
+    WHERE id = $1
+    RETURNING *;
+  `;
+  const values = [id, user_id, total_price, status];
+  return await pool.query(query, values);
 };
 
-export const updateOrder = async (order_id, status) => {
-  try {
-    const result = await pool.query(
-      "UPDATE orders SET status = $1 WHERE id = $2 RETURNING *",
-      [status, order_id]
-    );
-    return result;
-  } catch (error) {
-    throw new Error(`Ошибка при обновлении заказа: ${error.message}`);
-  }
+export const partialUpdateOrder = async (id, updates) => {
+  const fields = Object.keys(updates);
+  const values = Object.values(updates);
+
+  const setClause = fields.map((field, index) => `${field} = $${index + 2}`).join(", ");
+  const query = `
+    UPDATE orders
+    SET ${setClause}
+    WHERE id = $1
+    RETURNING *;
+  `;
+
+  return await pool.query(query, [id, ...values]);
 };
 
-export const deleteOrder = async (order_id) => {
-  try {
-    const result = await pool.query("DELETE FROM orders WHERE id = $1", [
-      order_id,
-    ]);
-    return result;
-  } catch (error) {
-    throw new Error(`Ошибка при удалении заказа: ${error.message}`);
-  }
+export const deleteOrder = async (id) => {
+  const query = `DELETE FROM orders WHERE id = $1 RETURNING *;`;
+  return await pool.query(query, [id]);
 };

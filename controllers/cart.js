@@ -9,7 +9,7 @@ export async function addCart (req, res) {
     const quantity = req.body.quantity;
 
     cartDbController.addToCart(id, productId, quantity)
-        .then((cart) => res.json(cart))
+        .then((cart) => res.json(cart.rows))
         .catch((err) => res.status(500).json({ error: err.message }));
 }
 
@@ -19,7 +19,9 @@ export async function getAllCart (req, res) {
     const id = payload.id;
 
     cartDbController.getCart(id)
-       .then((cart) => res.json(cart))
+       .then((cart) => {
+           res.json(cart)
+       })
        .catch((err) => res.status(500).json({ error: err.message }));
 }
 
