@@ -14,6 +14,7 @@ import cartRouter from '../routes/cartRouter.js';
 import productRouter from '../routes/productRouter.js';
 import categoryRouter from "../routes/categoryRouter.js";
 import orderRouter from '../routes/orderRouter.js';
+import jwtRouter from '../routes/jwtRrouter.js';
 
 import swaggerSpec from '../config/swagger-output.json' assert { type: 'json' };
 import { swaggerUi } from '../config/swagger.js';
@@ -48,6 +49,8 @@ app.use('/api', cartRouter);
 app.use('/api', productRouter);
 app.use('/api', categoryRouter);
 app.use('/api', orderRouter);
+app.use('/api', jwtRouter);
+
 
 
 export default app;

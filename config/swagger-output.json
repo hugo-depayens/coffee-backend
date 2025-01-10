@@ -85,6 +85,59 @@
       }
     }
 },
+  "/logout": {
+    "delete": {
+      "tags": ["Authentication"],
+      "description": "Log out the current user by invalidating their session or token",
+      "responses": {
+        "200": {
+          "description": "Successfully logged out"
+        },
+        "401": {
+          "description": "Unauthorized, user not authenticated"
+        },
+        "500": {
+          "description": "Internal Server Error"
+        }
+      }
+    }
+  },
+    "/refresh": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Обновление access токена",
+        "description": "Получает refresh токен из куков, проверяет его и возвращает новый access токен.",
+        "responses": {
+          "200": {
+            "description": "Успешное обновление токена",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string",
+                      "description": "Новый access токен"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Refresh токен отсутствует"
+          },
+          "403": {
+            "description": "Неверный или истекший refresh токен"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
     "/me": {
       "post": {
         "description": "Создание или обновление данных текущего пользователя. Этот запрос позволяет пользователю обновить или создать свою учетную запись.",
@@ -886,10 +939,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Order partially updated",
-            "schema": {
-              "$ref": "#/definitions/Order"
-            }
+            "description": "Order partially updated"
           },
           "400": {
             "description": "Bad Request"

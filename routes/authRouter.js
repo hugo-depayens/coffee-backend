@@ -86,12 +86,14 @@ router.post(
                 return res.status(401).json({ error: "Invalid credentials" });
             }
 
-            const token = generateToken({ id: user.id, username: user.username, email: user.email });
+            const token = generateToken({ id: user.id, username: user.username, email: user.email, role: user.role });
             console.log("Token generated for:", email);
 
             res.cookie("token", token, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
+                sameSite: 'strict',
+                maxAge: 24 * 60 * 60 * 1000
             });
             console.log("Cookie set for:", email);
 
@@ -102,5 +104,10 @@ router.post(
         }
     }
 );
+
+router.delete('/logout', (req, res) => {
+    res.clearCookie('token');
+    res.json({ message: 'Logged out successfully' });
+})
 
 export default router;

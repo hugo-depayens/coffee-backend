@@ -1,8 +1,6 @@
 import jwt from 'jsonwebtoken'
 
 
-
-
 export function authenticateToken(req, res, next)  {
     const token = req.cookies.token
 
@@ -20,8 +18,9 @@ export function authenticateToken(req, res, next)  {
     })
   }
 
-export function generateToken  ({id ,username, email})  {
-    return jwt.sign({id: id, username: username, email: email }, process.env.JWT_SECRET, { expiresIn: '24h' })
+
+export function generateToken  ({id ,username, email, role})  {
+    return jwt.sign({id: id, username: username, email: email, role: role }, process.env.JWT_SECRET, { expiresIn: '24h' })
 }
 
 
